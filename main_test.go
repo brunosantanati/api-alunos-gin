@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -30,4 +32,11 @@ func TestVerificaStatusCodeDaSaudacaoComParametro(t *testing.T) {
 			resposta.Code, http.StatusOK)
 	}*/
 	assert.Equal(t, http.StatusOK, resposta.Code, "Deveriam ser iguais")
+	mockDaResposta := `{"API diz:":"E ai Bruno, tudo beleza?"}`
+	respostaBody, _ := ioutil.ReadAll(resposta.Body)
+
+	fmt.Println(string(respostaBody))
+	fmt.Println(mockDaResposta)
+
+	assert.Equal(t, mockDaResposta, string(respostaBody))
 }
