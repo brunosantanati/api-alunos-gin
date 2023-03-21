@@ -3,6 +3,7 @@
 ## Links úteis  
 [Código original](https://github.com/alura-cursos/api_rest_gin_go_2-validacoes-e-testes)  
 [Package validator](https://pkg.go.dev/gopkg.in/validator.v2)  
+[Testfy](https://github.com/stretchr/testify)  
 
 ## Comandos úteis  
 ```
@@ -12,5 +13,6 @@ docker-compose down
 
 go run main.go
 go get gopkg.in/validator.v2
+go get github.com/stretchr/testify
 go test
 ```
