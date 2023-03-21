@@ -11,6 +11,6 @@ docker-compose up
 docker-compose down
 
 go run main.go
-
 go get gopkg.in/validator.v2
+go test
 ```
