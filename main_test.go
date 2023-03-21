@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -13,6 +12,7 @@ import (
 )
 
 func SetupDasRotasDeTeste() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	rotas := gin.Default()
 	return rotas
 }
@@ -24,7 +24,7 @@ func SetupDasRotasDeTeste() *gin.Engine {
 func TestVerificaStatusCodeDaSaudacaoComParametro(t *testing.T) {
 	r := SetupDasRotasDeTeste()
 	r.GET("/:nome", controllers.Saudacao)
-	req, _ := http.NewRequest("GET", "Bruno", nil)
+	req, _ := http.NewRequest("GET", "/Bruno", nil)
 	resposta := httptest.NewRecorder()
 	r.ServeHTTP(resposta, req)
 	/*if resposta.Code != http.StatusOK {
@@ -32,11 +32,12 @@ func TestVerificaStatusCodeDaSaudacaoComParametro(t *testing.T) {
 			resposta.Code, http.StatusOK)
 	}*/
 	assert.Equal(t, http.StatusOK, resposta.Code, "Deveriam ser iguais")
+
 	mockDaResposta := `{"API diz:":"E ai Bruno, tudo beleza?"}`
 	respostaBody, _ := ioutil.ReadAll(resposta.Body)
 
-	fmt.Println(string(respostaBody))
-	fmt.Println(mockDaResposta)
+	//fmt.Println(string(respostaBody))
+	//fmt.Println(mockDaResposta)
 
 	assert.Equal(t, mockDaResposta, string(respostaBody))
 }
