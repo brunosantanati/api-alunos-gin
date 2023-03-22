@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -112,4 +113,23 @@ func TestDeletaAlunoHandler(t *testing.T) {
 	resposta := httptest.NewRecorder()
 	r.ServeHTTP(resposta, req)
 	assert.Equal(t, http.StatusOK, resposta.Code)
+}
+
+func TestEditaUmAlunoHandler(t *testing.T) {
+	database.ConectaComBancoDeDados()
+	CriaAlunoMock()
+	defer DeletaAlunoMock()
+	r := SetupDasRotasDeTeste()
+	r.PATCH("/alunos/:id", controllers.EditaAluno)
+	aluno := models.Aluno{Nome: "Nome do Aluno Teste", CPF: "47123456789", RG: "123456700"}
+	valorJson, _ := json.Marshal(aluno)
+	pathParaEditar := "/alunos/" + strconv.Itoa(ID)
+	req, _ := http.NewRequest("PATCH", pathParaEditar, bytes.NewBuffer(valorJson))
+	resposta := httptest.NewRecorder()
+	r.ServeHTTP(resposta, req)
+	var alunoMockAtualizado models.Aluno
+	json.Unmarshal(resposta.Body.Bytes(), &alunoMockAtualizado)
+	assert.Equal(t, "47123456789", alunoMockAtualizado.CPF)
+	assert.Equal(t, "123456700", alunoMockAtualizado.RG)
+	assert.Equal(t, "Nome do Aluno Teste", alunoMockAtualizado.Nome)
 }
