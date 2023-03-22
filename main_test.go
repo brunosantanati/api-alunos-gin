@@ -8,14 +8,28 @@ import (
 
 	"github.com/brunosantanati/api-go-gin/controllers"
 	"github.com/brunosantanati/api-go-gin/database"
+	"github.com/brunosantanati/api-go-gin/models"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
+
+var ID int
 
 func SetupDasRotasDeTeste() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	rotas := gin.Default()
 	return rotas
+}
+
+func CriaAlunoMock() {
+	aluno := models.Aluno{Nome: "Nome do Aluno Teste", CPF: "12345678901", RG: "123456789"}
+	database.DB.Create(&aluno)
+	ID = int(aluno.ID)
+}
+
+func DeletaAlunoMock() {
+	var aluno models.Aluno
+	database.DB.Delete(&aluno, ID)
 }
 
 /*func TestFalhador(t *testing.T) {
@@ -45,6 +59,8 @@ func TestVerificaStatusCodeDaSaudacaoComParametro(t *testing.T) {
 
 func TestListandoTodosOsAlunosHandler(t *testing.T) {
 	database.ConectaComBancoDeDados()
+	CriaAlunoMock()
+	defer DeletaAlunoMock()
 	r := SetupDasRotasDeTeste()
 	r.GET("/alunos", controllers.ExibeTodosAlunos)
 	req, _ := http.NewRequest("GET", "/alunos", nil)
