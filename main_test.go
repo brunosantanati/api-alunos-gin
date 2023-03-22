@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/brunosantanati/api-go-gin/controllers"
+	"github.com/brunosantanati/api-go-gin/database"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -40,4 +41,15 @@ func TestVerificaStatusCodeDaSaudacaoComParametro(t *testing.T) {
 	//fmt.Println(mockDaResposta)
 
 	assert.Equal(t, mockDaResposta, string(respostaBody))
+}
+
+func TestListandoTodosOsAlunosHandler(t *testing.T) {
+	database.ConectaComBancoDeDados()
+	r := SetupDasRotasDeTeste()
+	r.GET("/alunos", controllers.ExibeTodosAlunos)
+	req, _ := http.NewRequest("GET", "/alunos", nil)
+	resposta := httptest.NewRecorder()
+	r.ServeHTTP(resposta, req)
+	//fmt.Println(resposta.Body)
+	assert.Equal(t, http.StatusOK, resposta.Code)
 }
