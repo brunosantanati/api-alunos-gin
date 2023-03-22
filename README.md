@@ -15,4 +15,6 @@ go run main.go
 go get gopkg.in/validator.v2
 go get github.com/stretchr/testify
 go test
+go test -run <nome-do-teste>
+go test -run TestBucaAlunoPorCPFHandler
 ```

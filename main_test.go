@@ -69,3 +69,15 @@ func TestListandoTodosOsAlunosHandler(t *testing.T) {
 	//fmt.Println(resposta.Body)
 	assert.Equal(t, http.StatusOK, resposta.Code)
 }
+
+func TestBucaAlunoPorCPFHandler(t *testing.T) {
+	database.ConectaComBancoDeDados()
+	CriaAlunoMock()
+	defer DeletaAlunoMock()
+	r := SetupDasRotasDeTeste()
+	r.GET("/alunos/cpf/:cpf", controllers.BuscaAlunoPorCPF)
+	req, _ := http.NewRequest("GET", "/alunos/cpf/12345678901", nil)
+	resposta := httptest.NewRecorder()
+	r.ServeHTTP(resposta, req)
+	assert.Equal(t, http.StatusOK, resposta.Code)
+}
